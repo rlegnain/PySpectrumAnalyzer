@@ -41,6 +41,10 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
         self.comBoxWinFunction = PySide.QtGui.QComboBox()
         self.comBoxWinFunction.addItem("Rectangular")
         self.comBoxWinFunction.addItem("Hamming ")
+        self.comBoxWinFunction.addItem("Hanning ")
+        self.comBoxWinFunction.addItem("Bartlett ")
+        self.comBoxWinFunction.addItem("Blackman ")
+
 
         ''' Layouts '''
         ''' Screen layout '''
@@ -73,10 +77,17 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
 
     def SelectWindowsFun(self, index):
         global window
-        if index == 0:
+        if   index == 0:
             window = np.ones(CHUNK)
-        elif index== 1:
+        elif index == 1:
             window = np.hamming(CHUNK)
+        elif index == 2:
+            window = np.hanning(CHUNK)
+        elif index == 3:
+            window = np.bartlett(CHUNK)
+        elif index == 4:
+             window = np.blackman(CHUNK)
+
 
 
     def BtnPower_clicked(self):
