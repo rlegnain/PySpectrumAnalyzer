@@ -36,21 +36,29 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
 
         ''' Create power ON/OFF button '''
         self.BtnPower = PySide.QtGui.QPushButton("OFF")
-        #self.BtnPower.setStyleSheet('QPushButton {color: red}')
-        
+        #self.BtnPower.setStyleSheet('QPushButton {color: red}')        
         ''' Create List box of Windows functions Menu'''
         self.comBoxWinFunction = PySide.QtGui.QComboBox()
         self.comBoxWinFunction.addItem("Rectangular")
         self.comBoxWinFunction.addItem("Hamming ")
 
         ''' Layouts '''
+        ''' Screen layout '''
+        self.screenLyout = PySide.QtGui.QVBoxLayout()
+        self.screenLyout.addWidget(self.ScreenTIME,)
+        self.screenLyout.addWidget(self.ScreenFFT)
+
+
+        ''' Parameter Layout'''
+        self.ParameterLyout = PySide.QtGui.QVBoxLayout()
+        self.ParameterLyout.addWidget(self.BtnPower)
+        self.ParameterLyout.addWidget(self.comBoxWinFunction)
+
+        ''' All Layout'''
         self.Grid = PySide.QtGui.QGridLayout() 
         self.Grid.setSpacing(10)
-        self.Grid.addWidget(self.ScreenTIME, 0,0,16,12)
-        self.Grid.addWidget(self.ScreenFFT, 17,0,16,12)
-
-        self.Grid.addWidget(self.BtnPower, 0,13)
-        self.Grid.addWidget(self.comBoxWinFunction, 1,13)
+        self.Grid.addLayout(self.screenLyout, 0,0,16,24)
+        self.Grid.addLayout(self.ParameterLyout, 0,25)
 
 
 
