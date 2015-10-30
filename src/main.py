@@ -2,6 +2,8 @@ import pyaudio
 import numpy as np
 import pyqtgraph as pg
 import PySide 
+import Devices
+
 
 CHUNK = 1024    #  CHUNK is power of 2
 samlingRate = 44100 # sampling/second
@@ -20,12 +22,14 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
         self.resize(700, 700)      
         self.setWindowTitle("Spectrum Analyzer")  
         self.UIsetup()
+        self.device =  Devices.sundCardDevice(FORMAT, CHANNELS, samlingRate, CHUNK)
+
         self.ON_OFF = False   # False means OFF
 
     def UIsetup(self):
         ''' Creeate screen to plot TIME domain'''
         self.ScreenTIME = pg.PlotWidget(background=(0, 0, 0))  # define plot windows
-        self.ScreenTIME.setRange(yRange=[-4000,4000])
+        self.ScreenTIME.setRange(yRange=[-2000,2000])
         self.ScreenTIME.showGrid(x = True, y = True, alpha = 0.3) 
         self.timePlot  = self.ScreenTIME.plot(pen='y', )
         self.ScreenTIME.setLabels(left=('Amplitue')) 
@@ -34,7 +38,7 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
 
         ''' Create screen to plot Frequency domain  '''
         self.ScreenFFT = pg.PlotWidget( background=(0, 0, 0))  # define plot windows
-        self.ScreenFFT.setRange(yRange=[5,1000])
+        self.ScreenFFT.setRange(yRange=[0,1000])
         self.ScreenFFT.showGrid(x = True, y = True, alpha = 0.3) 
         self.fftPlot  = self.ScreenFFT.plot(pen='y', )
         self.ScreenFFT.setLabels(left=('Magnitude')) 
@@ -127,7 +131,7 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
 
 
     def TurnON(self):    
-        self.openPort()
+        self.device.openPort()
         self.t = PySide.QtCore.QTimer()
         self.t.timeout.connect(self.update)
         self.t.start(50) # QTimer takes ms
@@ -137,27 +141,13 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
     def TurnOFF(self):
         self.t.stop()
     
-    def openPort(self):   
-        self.p = pyaudio.PyAudio()
-        self.Stream = self.p.open(format = FORMAT, channels = CHANNELS, rate = samlingRate, input = True, frames_per_buffer = CHUNK)
-  
-    def readSignal(self):
-        signal = self.Stream.read(CHUNK)
-        data = np.fromstring(signal, dtype=np.int16)
-
-        return data
     
-    def closePort(self):
-        self.Stream.stop_stream()
-        self.Stream.close()
-        self.p.terminate()
-
     def update(self):        
         self.plotOnScreen()
 
     def calculateFFT(self):
         global window
-        timeSignal = self.readSignal()*window
+        timeSignal = self.device.readSignal()*window
         TwoSideFFT = np.fft.fft(timeSignal)/ (CHUNK)   # Two-side FFT.   We devided by CHUNK (please revise FFT)
         OneSideFFT = 2 * TwoSideFFT[0 : OneSideFFT_points]  # we multiply by 2, because we remove the second FFT side (read FFT)
         MagnitudeFFT = np.abs(OneSideFFT)
@@ -180,4 +170,3 @@ if __name__ == '__main__':
     
         
     app.exec_()
-    
