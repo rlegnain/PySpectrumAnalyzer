@@ -129,19 +129,16 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
             self.BtnPower.setText("ON")
             #self.BtnPower.setStyleSheet('QPushButton {color: green}')
 
-
     def TurnON(self):    
         self.device.openPort()
         self.t = PySide.QtCore.QTimer()
         self.t.timeout.connect(self.update)
         self.t.start(50) # QTimer takes ms
 
-
-
     def TurnOFF(self):
         self.t.stop()
     
-    
+
     def update(self):        
         self.plotOnScreen()
 
