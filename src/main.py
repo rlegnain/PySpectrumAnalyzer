@@ -3,6 +3,7 @@ import numpy as np
 import pyqtgraph as pg
 import PySide 
 import Devices
+import Screen
 
 
 CHUNK = 1024    #  CHUNK is power of 2
@@ -28,21 +29,24 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
 
     def UIsetup(self):
         ''' Creeate screen to plot TIME domain'''
-        self.ScreenTIME = pg.PlotWidget(background=(0, 0, 0))  # define plot windows
-        self.ScreenTIME.setRange(yRange=[-2000,2000])
-        self.ScreenTIME.showGrid(x = True, y = True, alpha = 0.3) 
+        self.ScreenTIME = Screen.Display("Time (ms)", "Amplitude",  [0 , .022], [-2000 , 2000])
         self.timePlot  = self.ScreenTIME.plot(pen='y', )
-        self.ScreenTIME.setLabels(left=('Amplitue')) 
-        self.ScreenTIME.setLabels(bottom=('Time (ms)')) 
+        # self.ScreenTIME = pg.PlotWidget(background=(0, 0, 0))  # define plot windows
+        # self.ScreenTIME.setRange(yRange=[-2000,2000])
+        # self.ScreenTIME.showGrid(x = True, y = True, alpha = 0.3) 
+        # self.ScreenTIME.setLabels(left=('Amplitue')) 
+        # self.ScreenTIME.setLabels(bottom=('Time (ms)')) 
+        # self.timePlot  = self.ScreenTIME.plot(pen='y', )
 
 
         ''' Create screen to plot Frequency domain  '''
-        self.ScreenFFT = pg.PlotWidget( background=(0, 0, 0))  # define plot windows
-        self.ScreenFFT.setRange(yRange=[0,1000])
-        self.ScreenFFT.showGrid(x = True, y = True, alpha = 0.3) 
-        self.fftPlot  = self.ScreenFFT.plot(pen='y', )
-        self.ScreenFFT.setLabels(left=('Magnitude')) 
-        self.ScreenFFT.setLabels(bottom=('Frequency (Hz)')) 
+        self.ScreenFFT =  Screen.Display("fREQUENCY (Hz)", "Magnitude",  [0,8000], [0,2000])
+        self.fftPlot = self.ScreenFFT.plot(pen='y', )
+        # self.ScreenFFT.setRange(yRange=[0,1000])
+        # self.ScreenFFT.showGrid(x = True, y = True, alpha = 0.3) 
+        # self.ScreenFFT.setLabels(left=('Magnitude')) 
+        # self.ScreenFFT.setLabels(bottom=('Frequency (Hz)')) 
+        # self.fftPlot  = self.ScreenFFT.plot(pen='y', )
 
         ''' Create power ON/OFF button '''
         self.BtnPower = PySide.QtGui.QPushButton("OFF")
