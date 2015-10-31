@@ -24,19 +24,19 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
         self.setWindowTitle("Spectrum Analyzer")  
         self.UIsetup()
         self.device =  Devices.sundCardDevice(FORMAT, CHANNELS, samlingRate, CHUNK)
+
         self.ON_OFF = False   # False means OFF
 
     def UIsetup(self):
         ''' Create tabs'''
-        self.tabs = PySide.QtGui.QTabWidget()
-        self.tab1 = PySide.QtGui.QTabWidget()   # Osciliscope
-        self.tab2 = PySide.QtGui.QTabWidget()   # Spectrum Analyzer
-        self.tab3 = PySide.QtGui.QTabWidget()   # Function Generator
-        self.tabs.addTab(self.tab1,"Tab 1")
-        self.tabs.addTab(self.tab2,"Tab 2")
-        self.tabs.addTab(self.tab3,"Tab 3")
+        tabs = PySide.QtGui.QTabWidget()
+        tab1 = PySide.QtGui.QTabWidget()   # Osciliscope
+        tab2 = PySide.QtGui.QTabWidget()   # Spectrum Analyzer
+        tab3 = PySide.QtGui.QTabWidget()   # Function Generator
+        tabs.addTab(tab1,"Tab 1")
+        tabs.addTab(tab2,"Tab 2")
+        tabs.addTab(tab3,"Tab 3")
 
-        self.tabs.resize(600, 600)
 
         ''' Creeate screen to plot TIME domain'''
         self.ScreenTIME = Screen.Display("Time (ms)", "Amplitude",  [0 , .022], [-2000 , 2000])
@@ -98,12 +98,7 @@ class SpectrumAnalyzer(PySide.QtGui.QWidget):
         self.Grid.addLayout(self.screenLyout, 0,0,16,24)
         self.Grid.addLayout(self.ParameterLyout, 0,25)
 
-        self.tab1.setLayout(self.Grid)
-
-        self.mainLayout = PySide.QtGui.QVBoxLayout()
-        self.mainLayout.addWidget(self.tabs)
-        self.setLayout(self.mainLayout)
-
+        self.setLayout(self.Grid)
         self.show()
         
 
