@@ -32,6 +32,7 @@ class MainWindow(PySide.QtGui.QWidget):
         self.tab2 = PySide.QtGui.QTabWidget()   # Spectrum Analyzer
         self.tabs.addTab(myEq.spectrumAnalyzer(),"Spectrum Analyzer")
         self.tabs.addTab(myEq.oscilloscope(),"Oscilloscope")
+        self.tabs.addTab(PySide.QtGui.QWidget(),"Functions Generator")
         self.tabs.resize(600, 600)
 
 
