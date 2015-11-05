@@ -6,9 +6,9 @@ import Devices
 import Screen
 
 CHUNK = 1024    #  CHUNK is power of 2
-samlingRate = 44100 # sampling/second
+samlingRate = 44000 # sampling/second
 CHANNELS = 1
-FORMAT = pyaudio.paInt16
+FORMAT = pyaudio.paInt32
 
 OneSideFFT_points = CHUNK/2 + 1      #Calculate the of one-side FFF points.
 window = np.ones(CHUNK)
@@ -22,7 +22,7 @@ class spectrumAnalyzer(QtGui.QWidget):
         self.ON_OFF = False   # False means OFF
 
         ''' Create Widget for screen'''
-        self.ScreenFFT =  Screen.Display("Frequency (Hz)", "Magnitude",  [0,8000], [0,2000])
+        self.ScreenFFT =  Screen.Display("Frequency (Hz)", "Magnitude",  [0,8000], [0,10000000])
         self.fftPlot = self.ScreenFFT.plot(pen='y', )
         
         ''' Create list box of Frequency range'''

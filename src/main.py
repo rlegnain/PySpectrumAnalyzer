@@ -6,13 +6,6 @@ import Devices
 import Screen
 import Equipment as myEq
 
-CHUNK = 1024    #  CHUNK is power of 2
-samlingRate = 44100 # sampling/second
-CHANNELS = 1
-FORMAT = pyaudio.paInt16
-
-OneSideFFT_points = CHUNK/2 + 1      #Calculate the of one-side FFF points.
-window = np.ones(CHUNK)
 
 #class SpectrumAnalyzer(pg.GraphicsWindow):
 class MainWindow(PySide.QtGui.QWidget):
@@ -23,7 +16,6 @@ class MainWindow(PySide.QtGui.QWidget):
         self.resize(700, 700)      
         self.setWindowTitle("Measurment Equipment")  
         self.UIsetup()
-        self.device =  Devices.sundCardDevice(FORMAT, CHANNELS, samlingRate, CHUNK)
         self.ON_OFF = False   # False means OFF
 
     def UIsetup(self):
