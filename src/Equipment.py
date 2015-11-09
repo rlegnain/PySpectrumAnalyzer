@@ -13,7 +13,6 @@ FORMAT = pyaudio.paInt32
 OneSideFFT_points = CHUNK/2 + 1      #Calculate the of one-side FFF points.
 window = np.ones(CHUNK)
 
-
 class spectrumAnalyzer(QtGui.QWidget):
     def __init__(self, parent=None):
         super(spectrumAnalyzer, self).__init__(parent)
@@ -138,9 +137,6 @@ class spectrumAnalyzer(QtGui.QWidget):
     def plotOnScreen(self):
         MagnitudeFFT, freqRange  = self.calculateFFT()
         self.fftPlot.setData(freqRange, MagnitudeFFT)
-
-
-
 
 
 ''' Oscilloscpe Class ======================================================================='''

@@ -4,7 +4,6 @@ import pyqtgraph as pg
 import PySide 
 import Screen
 
-
 class spectrumAnalyser(PySide.QtGui.QWidget):
 
 	def __initi__ ():
@@ -32,7 +31,6 @@ class spectrumAnalyser(PySide.QtGui.QWidget):
         self.comBoxChannelList.addItem("Channel 2")
         self.comBoxChannelList.addItem("Both channels")
 
-
         ''' Layouts '''
         ''' Screen layout '''
         self.screenLyout = PySide.QtGui.QVBoxLayout()
@@ -44,9 +42,6 @@ class spectrumAnalyser(PySide.QtGui.QWidget):
         self.ParameterLyout.addWidget(self.comBoxWinFunction)
         self.ParameterLyout.addWidget(self.comBoxChannelList)
         
-        
-
-
         ''' All Layout'''
         self.Grid = PySide.QtGui.QGridLayout() 
         self.Grid.setSpacing(10)

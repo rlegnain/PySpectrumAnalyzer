@@ -6,11 +6,9 @@ import Devices
 import Screen
 import Equipment as myEq
 
-
 #class SpectrumAnalyzer(pg.GraphicsWindow):
 class MainWindow(PySide.QtGui.QWidget):
     """docstring for ClassName"""
-
     def __init__ (self, parent = None):  
         super(MainWindow, self).__init__(parent)
         self.resize(700, 700)      
@@ -27,19 +25,13 @@ class MainWindow(PySide.QtGui.QWidget):
         self.tabs.addTab(PySide.QtGui.QWidget(),"Functions Generator")
         self.tabs.resize(600, 600)
 
-
         ''' Layouts '''        
-
         self.mainLayout = PySide.QtGui.QVBoxLayout()
         self.mainLayout.addWidget(self.tabs)
         self.setLayout(self.mainLayout)
 
-
-
 if __name__ == '__main__':
     app = PySide.QtGui.QApplication([])   
     s = MainWindow()
-    s.show()
-    
-        
+    s.show()       
     app.exec_()
