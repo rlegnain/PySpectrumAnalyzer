@@ -124,8 +124,10 @@ class spectrumAnalyzer(QtGui.QWidget):
 
     def calculateFFT(self):
         global window
-        timeSignal = self.device.readSignal()*window
-        TwoSideFFT = np.fft.fft(timeSignal)/ (CHUNK)   # Two-side FFT.   We devided by CHUNK (please revise FFT)
+        CH1, CH2 = self.device.readSignal()
+        timeSignalCH1 = CH1*window
+        timeSignalCH2 = CH2*window
+        TwoSideFFT = np.fft.fft(timeSignalCH1)/ (CHUNK)   # Two-side FFT.   We devided by CHUNK (please revise FFT)
         OneSideFFT = 2 * TwoSideFFT[0 : OneSideFFT_points]  # we multiply by 2, because we remove the second FFT side (read FFT)
         MagnitudeFFT = np.abs(OneSideFFT)
         #freqSignal_dB = 10*np.log10(freqSignal)
@@ -149,7 +151,8 @@ class oscilloscope(QtGui.QWidget):
 
         ''' Create Widget for screen'''
         self.ScreenTIME = Screen.Display("Time (ms)", "Amplitude",  [0 , .022], [-2000 , 2000])
-        self.timePlot  = self.ScreenTIME.plot(pen='y', )
+        self.timePlotCH1  = self.ScreenTIME.plot(pen='y', )
+        self.timePlotCH2  = self.ScreenTIME.plot(pen='r', )
         
         ''' Create list box of Frequency range'''
         self.FreqRangeGroup = QtGui.QGroupBox("Time Duration (ms)")
@@ -229,18 +232,11 @@ class oscilloscope(QtGui.QWidget):
     def update(self):        
         self.plotOnScreen()
 
-    def calculateFFT(self):
-        global window
-        timeSignal = self.device.readSignal()
-        TwoSideFFT = np.fft.fft(timeSignal)/ (CHUNK)   # Two-side FFT.   We devided by CHUNK (please revise FFT)
-        OneSideFFT = 2 * TwoSideFFT[0 : OneSideFFT_points]  # we multiply by 2, because we remove the second FFT side (read FFT)
-        MagnitudeFFT = np.abs(OneSideFFT)
-        #freqSignal_dB = 10*np.log10(freqSignal)
-        timeRange = np.arange(0 , CHUNK) / float(samlingRate)
-        freqRange = np.arange(0 , OneSideFFT_points) * (float(samlingRate)/ float(CHUNK))
-
-        return timeSignal , timeRange , MagnitudeFFT, freqRange
 
     def plotOnScreen(self):
-        timeSignal , timeRange , MagnitudeFFT, freqRange  = self.calculateFFT()
-        self.timePlot.setData(timeRange, timeSignal)
+        CH1, CH2 = self.device.readSignal()
+        timeSignalCH1 = CH1*window
+        timeSignalCH2 = CH2*window
+        timeRange = np.arange(0 , CHUNK) / float(samlingRate)
+        self.timePlotCH1.setData(timeRange, timeSignalCH1)
+        self.timePlotCH2.setData(timeRange, timeSignalCH2)

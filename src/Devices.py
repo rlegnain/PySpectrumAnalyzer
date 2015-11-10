@@ -19,7 +19,7 @@ class sundCardDevice:
 		signal = self.Stream.read(self.CHUNK)
 		data = np.fromstring(signal, dtype=np.int32)
 		
-		return data[1::2]
+		return data[::2] , data[1::2]
 
 	def closePort(self):
 		self.Stream.stop_stream()
