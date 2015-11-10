@@ -6,8 +6,8 @@ import Devices
 import Screen
 
 CHUNK = 1024    #  CHUNK is power of 2
-samlingRate = 44000 # sampling/second
-CHANNELS = 1
+samlingRate = 44100 # sampling/second
+CHANNELS = 2
 FORMAT = pyaudio.paInt32
 
 OneSideFFT_points = CHUNK/2 + 1      #Calculate the of one-side FFF points.
