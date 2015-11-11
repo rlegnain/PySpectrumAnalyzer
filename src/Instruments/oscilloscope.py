@@ -6,10 +6,10 @@ from PySide import QtCore, QtGui
 import Interface.soundCard as Devices
 import Screen
 
-CHUNK = 1024    #  CHUNK is power of 2
-samlingRate = 44100 # sampling/second
+CHUNK = 2048    #  CHUNK is power of 2
+samlingRate = 88200 # sampling/second
 CHANNELS = 2
-FORMAT = pyaudio.paInt32
+FORMAT = pyaudio.paInt16
 
 OneSideFFT_points = CHUNK/2 + 1      #Calculate the of one-side FFF points.
 window = np.ones(CHUNK)
