@@ -1,0 +1,117 @@
+import pyaudio
+import numpy as np
+import pyqtgraph as pg
+from PySide import QtCore, QtGui
+#import Devices
+import Interface.soundCard as Devices
+import Screen
+
+CHUNK = 1024    #  CHUNK is power of 2
+samlingRate = 44100 # sampling/second
+CHANNELS = 2
+FORMAT = pyaudio.paInt32
+
+OneSideFFT_points = CHUNK/2 + 1      #Calculate the of one-side FFF points.
+window = np.ones(CHUNK)
+
+
+
+''' Oscilloscpe Class ======================================================================='''
+class oscilloscope(QtGui.QWidget):
+    def __init__(self, parent=None):
+        super(oscilloscope, self).__init__(parent)
+
+        self.device =  Devices.sundCardDevice(FORMAT, CHANNELS, samlingRate, CHUNK)
+        self.ON_OFF = False   # False means OFF
+
+        ''' Create Widget for screen'''
+        self.ScreenTIME = Screen.Display("Time (ms)", "Amplitude",  [0 , .022], [-2000 , 2000])
+        self.timePlotCH1  = self.ScreenTIME.plot(pen='y', )
+        self.timePlotCH2  = self.ScreenTIME.plot(pen='r', )
+        
+        ''' Create list box of Frequency range'''
+        self.FreqRangeGroup = QtGui.QGroupBox("Time Duration (ms)")
+        self.FreRangeLayout = QtGui.QGridLayout()
+        self.SpinBoxStartFreq = QtGui.QDoubleSpinBox()
+        self.SpinBoxStopFreq  = QtGui.QDoubleSpinBox()
+        self.LabelStartFreq = QtGui.QLabel("Start")
+        self.LabelStopFreq  = QtGui.QLabel("Stop")   
+        self.SpinBoxStartFreq.setRange(0,1)
+        # self.SpinBoxStopFreq.setMinimum(0)
+        # self.SpinBoxStopFreq.setMaximum(1000000000)
+        self.SpinBoxStartFreq.setValue(0)
+        self.SpinBoxStopFreq.setValue(.022)
+        self.SpinBoxStartFreq.setSingleStep(0.01)
+        self.SpinBoxStopFreq.setSingleStep(0.01)
+        self.FreRangeLayout.addWidget(self.LabelStartFreq,0,0)
+        self.FreRangeLayout.addWidget(self.LabelStopFreq,1,0)
+        self.FreRangeLayout.addWidget(self.SpinBoxStartFreq,0,1)
+        self.FreRangeLayout.addWidget(self.SpinBoxStopFreq,1,1)
+        self.FreqRangeGroup.setLayout(self.FreRangeLayout)
+        self.SpinBoxStartFreq.valueChanged.connect(self.StartFreqChanged)
+        self.SpinBoxStopFreq.valueChanged.connect(self.StopFreqChanged)
+
+
+        ''' Create power ON/OFF button '''
+        self.BtnPower = QtGui.QPushButton("OFF")
+        #self.BtnPower.setStyleSheet('QPushButton {color: red}')  
+
+        ''' Layouts '''
+        self.mainLayout = QtGui.QVBoxLayout()       # Main  Layout (Horizontal)
+
+        self.ParameterLayout =  QtGui.QGridLayout() # parameter Laygout Grid
+        self.ParameterLayout.setSpacing(10)
+        self.ParameterLayout.addWidget(self.FreqRangeGroup, 0,0)
+        self.ParameterLayout.addWidget(self.BtnPower, 0,2)
+
+        self.mainLayout.addWidget(self.ScreenTIME)
+        self.mainLayout.addLayout(self.ParameterLayout)
+
+        self.setLayout(self.mainLayout )
+
+
+        #QtCore.QObject.connect(button, QtCore.SIGNAL ('clicked()'), someFunc)
+        self.BtnPower.clicked.connect(self.BtnPower_clicked)
+
+    def StartFreqChanged(self):
+		xLimit = [self.SpinBoxStartFreq.value() , self.SpinBoxStopFreq.value()]
+		self.ScreenTIME.setRange(xRange=xLimit)
+
+    def StopFreqChanged(self):
+		xLimit = [self.SpinBoxStartFreq.value() , self.SpinBoxStopFreq.value()]
+		self.ScreenTIME.setRange(xRange=xLimit)
+
+
+    def BtnPower_clicked(self):
+        if self.ON_OFF :
+            self.TurnOFF()
+            self.ON_OFF = False
+            self.BtnPower.setText("OFF")
+            #self.BtnPower.setStyleSheet('QPushButton {color: red}')
+        else:
+            self.TurnON()
+            self.ON_OFF = True
+            self.BtnPower.setText("ON")
+            #self.BtnPower.setStyleSheet('QPushButton {color: green}')
+
+    def TurnON(self):    
+        self.device.openPort()
+        self.t = QtCore.QTimer()
+        self.t.timeout.connect(self.update)
+        self.t.start(50) # QTimer takes ms
+
+    def TurnOFF(self):
+        self.t.stop()
+    
+
+    def update(self):        
+        self.plotOnScreen()
+
+
+    def plotOnScreen(self):
+        CH1, CH2 = self.device.readSignal()
+        timeSignalCH1 = CH1*window
+        timeSignalCH2 = CH2*window
+        timeRange = np.arange(0 , CHUNK) / float(samlingRate)
+        self.timePlotCH1.setData(timeRange, timeSignalCH1)
+        self.timePlotCH2.setData(timeRange, timeSignalCH2)

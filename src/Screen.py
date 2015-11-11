@@ -2,7 +2,8 @@ import pyaudio
 import numpy as np
 import pyqtgraph as pg
 import PySide 
-import Devices
+#import Devices
+import Interface.soundCard as Devices
 
 class Display(pg.PlotWidget):
 	"""docstring for ClassName"""

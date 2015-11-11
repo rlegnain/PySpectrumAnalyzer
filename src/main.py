@@ -2,9 +2,12 @@ import pyaudio
 import numpy as np
 import pyqtgraph as pg
 import PySide 
-import Devices
-import Screen
-import Equipment as myEq
+#import Devices
+#import Screen
+#import Equipment as myEq
+import Instruments.oscilloscope as myScope
+import Instruments.spectrumAnalyzer as myAnalyzer
+
 
 #class SpectrumAnalyzer(pg.GraphicsWindow):
 class MainWindow(PySide.QtGui.QWidget):
@@ -19,10 +22,14 @@ class MainWindow(PySide.QtGui.QWidget):
     def UIsetup(self):
         ''' Create tabs'''
         self.tabs = PySide.QtGui.QTabWidget()
-        self.tab2 = PySide.QtGui.QTabWidget()   # Spectrum Analyzer
-        self.tabs.addTab(myEq.spectrumAnalyzer(),"Spectrum Analyzer")
-        self.tabs.addTab(myEq.oscilloscope(),"Oscilloscope")
+        #self.tab2 = PySide.QtGui.QTabWidget()   # Spectrum Analyzer
+        # self.tabs.addTab(myEq.spectrumAnalyzer(),"Spectrum Analyzer")
+        # self.tabs.addTab(myEq.oscilloscope(),"Oscilloscope")
+        # self.tabs.addTab(PySide.QtGui.QWidget(),"Functions Generator")
+        self.tabs.addTab(myAnalyzer.spectrumAnalyzer(),"Spectrum Analyzer")
+        self.tabs.addTab(myScope.oscilloscope(),"Oscilloscope")
         self.tabs.addTab(PySide.QtGui.QWidget(),"Functions Generator")
+		
         self.tabs.resize(600, 600)
 
         ''' Layouts '''        
