@@ -7,6 +7,7 @@ import PySide
 #import Equipment as myEq
 import Instruments.oscilloscope as myScope
 import Instruments.spectrumAnalyzer as myAnalyzer
+import Interface.settingUI as setting
 
 
 #class SpectrumAnalyzer(pg.GraphicsWindow):
@@ -29,6 +30,7 @@ class MainWindow(PySide.QtGui.QWidget):
         self.tabs.addTab(myAnalyzer.spectrumAnalyzer(),"Spectrum Analyzer")
         self.tabs.addTab(myScope.oscilloscope(),"Oscilloscope")
         self.tabs.addTab(PySide.QtGui.QWidget(),"Functions Generator")
+        self.tabs.addTab(setting.settingUI(), "Setting")
 		
         self.tabs.resize(600, 600)
 
