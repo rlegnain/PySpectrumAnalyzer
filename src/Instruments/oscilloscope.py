@@ -21,7 +21,14 @@ class oscilloscope(QtGui.QWidget):
     def __init__(self, parent=None):
         super(oscilloscope, self).__init__(parent)
 
-        self.device =  Devices.sundCardDevice(FORMAT, CHANNELS, samlingRate, CHUNK)
+        self.device =  Devices.sundCardDevice()
+        self.CHUNK = self.device.CHUNK    #  CHUNK is power of 2
+        self.samlingRate = self.device.samlingRate # sampling/second
+        self.CHANNELS = self.device.CHANNELS
+        self.FORMAT = self.device.FORMAT
+        self.window = np.ones(self.CHUNK)
+		
+		
         self.ON_OFF = False   # False means OFF
 
         ''' Create Widget for screen'''
@@ -110,8 +117,8 @@ class oscilloscope(QtGui.QWidget):
 
     def plotOnScreen(self):
         CH1, CH2 = self.device.readSignal()
-        timeSignalCH1 = CH1*window
-        timeSignalCH2 = CH2*window
-        timeRange = np.arange(0 , CHUNK) / float(samlingRate)
+        timeSignalCH1 = CH1*self.window
+        timeSignalCH2 = CH2*self.window
+        timeRange = np.arange(0 , self.CHUNK) / float(self.samlingRate)
         self.timePlotCH1.setData(timeRange, timeSignalCH1)
         self.timePlotCH2.setData(timeRange, timeSignalCH2)

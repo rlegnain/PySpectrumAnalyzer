@@ -5,11 +5,16 @@ import PySide
 
 
 class sundCardDevice:
-	def __init__(self, FORMAT, CHANNELS, samlingRate, CHUNK):
-		self.FORMAT = FORMAT;
-		self.CHANNELS = CHANNELS
-		self.samlingRate = samlingRate
-		self.CHUNK = CHUNK
+	def __init__(self):
+		# self.FORMAT = FORMAT;
+		# self.CHANNELS = CHANNELS
+		# self.samlingRate = samlingRate
+		# self.CHUNK = CHUNK
+		self.FORMAT = pyaudio.paInt16;
+		self.CHANNELS = 2
+		self.samlingRate = 88200
+		self.CHUNK = 2048
+		
 		self.maxVal = 2.0**(16-1)    #  (16bit -1bit)  = 15 for scaling the amplitude
 	def openPort(self):   
 		self.p = pyaudio.PyAudio()

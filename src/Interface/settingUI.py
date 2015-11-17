@@ -4,7 +4,12 @@ class settingUI(QtGui.QWidget):
 	def __init__(self, parent=None):
 		super(settingUI, self).__init__()
 
-		
+		# Parameter
+		# self.samplingRate = 44100
+		# self.chunck = 1024
+		# self.format = pyaudio.paInt16
+		# self.channels
+
 		# Create  Label and Spin Box for Inteface 
 		self.LabelInterface = QtGui.QLabel("Interface")         # Lablel of Interface
 		self.comBoxInterface = QtGui.QComboBox()            # list of interface
