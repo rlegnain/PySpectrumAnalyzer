@@ -15,7 +15,6 @@ OneSideFFT_points = CHUNK/2 + 1      #Calculate the of one-side FFF points.
 window = np.ones(CHUNK)
 
 
-
 ''' Oscilloscpe Class ======================================================================='''
 class oscilloscope(QtGui.QWidget):
     def __init__(self, parent=None):
@@ -57,7 +56,6 @@ class oscilloscope(QtGui.QWidget):
         self.FreqRangeGroup.setLayout(self.FreRangeLayout)
         self.SpinBoxStartFreq.valueChanged.connect(self.StartFreqChanged)
         self.SpinBoxStopFreq.valueChanged.connect(self.StopFreqChanged)
-
 
         ''' Create power ON/OFF button '''
         self.BtnPower = QtGui.QPushButton("OFF")
@@ -110,10 +108,8 @@ class oscilloscope(QtGui.QWidget):
     def TurnOFF(self):
         self.t.stop()
     
-
     def update(self):        
         self.plotOnScreen()
-
 
     def plotOnScreen(self):
         CH1, CH2 = self.device.readSignal()
