@@ -14,7 +14,6 @@ FORMAT = pyaudio.paInt16
 OneSideFFT_points = CHUNK/2 + 1      #Calculate the of one-side FFF points.
 window = np.ones(CHUNK)
 
-
 ''' Oscilloscpe Class ======================================================================='''
 class oscilloscope(QtGui.QWidget):
     def __init__(self, parent=None):
