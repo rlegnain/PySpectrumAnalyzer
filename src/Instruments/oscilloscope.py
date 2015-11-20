@@ -32,7 +32,7 @@ class oscilloscope(QtGui.QWidget):
         self.ON_OFF = False   # False means OFF
 
         ''' Create Widget for screen'''
-        self.ScreenTIME = Screen.Display("Time (ms)", "Amplitude",  [0 , .022], [-1.5 , 1.5])
+        self.ScreenTIME = Screen.Display("Time (ms)", "Amplitude",  [0 , .022], [-1 , 1])
         self.timePlotCH1  = self.ScreenTIME.plot(pen='y', )
         self.timePlotCH2  = self.ScreenTIME.plot(pen='r', )
         
