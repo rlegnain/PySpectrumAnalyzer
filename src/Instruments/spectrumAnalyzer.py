@@ -4,7 +4,7 @@ import pyqtgraph as pg
 from PySide import QtCore, QtGui
 #import Devices
 import Interface.soundCard as Devices
-import Screen
+import Instruments.Screen as Screen
 
 #CHUNK = 2048    #  CHUNK is power of 2
 #samlingRate = 88200 # sampling/second
@@ -25,8 +25,7 @@ class spectrumAnalyzer(QtGui.QWidget):
         self.FORMAT = self.device.FORMAT
         self.OneSideFFT_points = self.CHUNK/2 + 1      #Calculate the of one-side FFF points.
         self.window = np.ones(self.CHUNK)
-		
-		
+				
         self.ON_OFF = False   # False means OFF
 
         ''' Create Widget for screen'''
