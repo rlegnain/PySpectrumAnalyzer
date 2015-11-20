@@ -6,16 +6,6 @@ from PySide import QtCore, QtGui
 import Interface.soundCard as Devices
 import Instruments.Screen as Screen
 
-CHUNK = 2048    #  CHUNK is power of 2
-samlingRate = 88200 # sampling/second
-CHANNELS = 2
-FORMAT = pyaudio.paInt16
-
-OneSideFFT_points = CHUNK/2 + 1      #Calculate the of one-side FFF points.
-window = np.ones(CHUNK)
-
-
-
 ''' Oscilloscpe Class ======================================================================='''
 class oscilloscope(QtGui.QWidget):
     def __init__(self, parent=None):
@@ -26,9 +16,7 @@ class oscilloscope(QtGui.QWidget):
         self.samlingRate = self.device.samlingRate # sampling/second
         self.CHANNELS = self.device.CHANNELS
         self.FORMAT = self.device.FORMAT
-        self.window = np.ones(self.CHUNK)
-		
-		
+			
         self.ON_OFF = False   # False means OFF
 
         ''' Create Widget for screen'''
@@ -36,7 +24,9 @@ class oscilloscope(QtGui.QWidget):
         self.timePlotCH1  = self.ScreenTIME.plot(pen='y', )
         self.timePlotCH2  = self.ScreenTIME.plot(pen='r', )
         
-        ''' Create list box of Frequency range'''
+        self.ch1_panel = ChPanel("Ch1")
+        self.ch2_panel = ChPanel("Ch2")
+        
 #         self.FreqRangeGroup = QtGui.QGroupBox("Time Duration (ms)")
 #         self.FreRangeLayout = QtGui.QGridLayout()
 #         self.SpinBoxStartFreq = QtGui.QDoubleSpinBox()
@@ -57,8 +47,6 @@ class oscilloscope(QtGui.QWidget):
 #         self.FreqRangeGroup.setLayout(self.FreRangeLayout)
 #         self.SpinBoxStartFreq.valueChanged.connect(self.StartFreqChanged)
 #         self.SpinBoxStopFreq.valueChanged.connect(self.StopFreqChanged)
-        self.ch1_panel = ChPanel("Ch1")
-        self.ch2_panel = ChPanel("Ch2")
 
         ''' Create power ON/OFF button '''
         self.BtnPower = QtGui.QPushButton("OFF")
@@ -79,14 +67,12 @@ class oscilloscope(QtGui.QWidget):
 
         self.setLayout(self.mainLayout )
 
-
         #QtCore.QObject.connect(button, QtCore.SIGNAL ('clicked()'), someFunc)
         self.BtnPower.clicked.connect(self.BtnPower_clicked)
 
 #     def StartFreqChanged(self):
 # 		xLimit = [self.SpinBoxStartFreq.value() , self.SpinBoxStopFreq.value()]
 # 		self.ScreenTIME.setRange(xRange=xLimit)
-# 
 #     def StopFreqChanged(self):
 # 		xLimit = [self.SpinBoxStartFreq.value() , self.SpinBoxStopFreq.value()]
 # 		self.ScreenTIME.setRange(xRange=xLimit)
@@ -120,14 +106,14 @@ class oscilloscope(QtGui.QWidget):
 
     def plotOnScreen(self):
         CH1, CH2 = self.device.readSignal()
-        timeSignalCH1 = ((self.ch1_panel.AmplitudeScaleBy * CH1) * self.window) + self.ch1_panel.PositionShifBy
-        timeSignalCH2 = ((self.ch2_panel.AmplitudeScaleBy * CH2) * self.window) + self.ch2_panel.PositionShifBy
+        timeSignalCH1 = (self.ch1_panel.AmplitudeScaleBy * CH1) + self.ch1_panel.PositionShifBy
+        timeSignalCH2 = (self.ch2_panel.AmplitudeScaleBy * CH2) + self.ch2_panel.PositionShifBy
         
         timeRange = np.arange(0 , self.CHUNK) / float(self.samlingRate)
         self.timePlotCH1.setData(timeRange, timeSignalCH1)
         self.timePlotCH2.setData(timeRange, timeSignalCH2)
 
-		
+''' creeate panel control for Channel 1 and channel 2		'''
 class ChPanel(QtGui.QWidget):
     def __init__(self,  GroupName):
         super(ChPanel, self ).__init__()
