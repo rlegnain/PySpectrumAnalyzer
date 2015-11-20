@@ -59,10 +59,7 @@ class oscilloscope(QtGui.QWidget):
 #         self.SpinBoxStopFreq.valueChanged.connect(self.StopFreqChanged)
         self.ch1_panel = ChPanel("Ch1")
         self.ch2_panel = ChPanel("Ch2")
-        
-        self.ch1_panel.amplScale_spinBox.valueChanged.connect(self.ch1_panel.scaleChanged)
-        
-        
+
         ''' Create power ON/OFF button '''
         self.BtnPower = QtGui.QPushButton("OFF")
         #self.BtnPower.setStyleSheet('QPushButton {color: red}')  
@@ -123,8 +120,9 @@ class oscilloscope(QtGui.QWidget):
 
     def plotOnScreen(self):
         CH1, CH2 = self.device.readSignal()
-        timeSignalCH1 = CH1*self.window
-        timeSignalCH2 = CH2*self.window
+        timeSignalCH1 = ((self.ch1_panel.AmplitudeScaleBy * CH1) * self.window) + self.ch1_panel.PositionShifBy
+        timeSignalCH2 = ((self.ch2_panel.AmplitudeScaleBy * CH2) * self.window) + self.ch2_panel.PositionShifBy
+        
         timeRange = np.arange(0 , self.CHUNK) / float(self.samlingRate)
         self.timePlotCH1.setData(timeRange, timeSignalCH1)
         self.timePlotCH2.setData(timeRange, timeSignalCH2)
@@ -133,13 +131,17 @@ class oscilloscope(QtGui.QWidget):
 class ChPanel(QtGui.QWidget):
     def __init__(self,  GroupName):
         super(ChPanel, self ).__init__()
-        self.amplScale_lable   = QtGui.QLabel("volt/Div")
+        self.AmplitudeScaleBy = 1
+        self.PositionShifBy   = 0
+    
+        self.amplScale_lable   = QtGui.QLabel("Amplitude X ")
         self.amplPsition_lable = QtGui.QLabel("position")
         
         self.amplScale_spinBox = QtGui.QDoubleSpinBox()
-        self.amplScale_spinBox.setRange(1,5)
+        self.amplScale_spinBox.setRange(0,5)
         self.amplScale_spinBox.setSingleStep(0.5)
-        
+        self.amplScale_spinBox.setValue(1)
+
         self.amplPosition_spinBox = QtGui.QDoubleSpinBox()
         self.amplPosition_spinBox.setRange(-1,1)
         self.amplPosition_spinBox.setSingleStep(0.2)
@@ -158,6 +160,13 @@ class ChPanel(QtGui.QWidget):
         self.mainLayout.addWidget(self.ChGroup)                
         self.setLayout(self.mainLayout )
         
+        #QtCore.QObject.connect(button, QtCore.SIGNAL ('clicked()'), someFunc)
+        self.amplScale_spinBox.valueChanged.connect(self.scaleChanged)
+        self.amplPosition_spinBox.valueChanged.connect(self.PositionChanged)
+        
     def scaleChanged(self):
-        pass
+        self.AmplitudeScaleBy = self.amplScale_spinBox.value()
+        
+    def PositionChanged(self):
+        self.PositionShifBy = self.amplPosition_spinBox.value()
 		
