@@ -95,8 +95,11 @@ class spectrumAnalyzer(QtGui.QWidget):
 
     def SelectWindowsFun(self, index):
         #global window
-		#self.window = np.ones(self.CHUNK)
-		x = {0: np.ones(self.CHUNK), 1:  np.hamming(self.CHUNK), 2: np.hanning(self.CHUNK), 3: np.bartlett(self.CHUNK), 4: np.blackman(self.CHUNK)}
+		x = {0: np.ones(self.CHUNK), 
+				1:  np.hamming(self.CHUNK), 
+				2: np.hanning(self.CHUNK), 
+				3: np.bartlett(self.CHUNK), 
+				4: np.blackman(self.CHUNK)}
 		self.window = x[index]
 		# if   index == 0:
             # self.window = np.ones(self.CHUNK)
