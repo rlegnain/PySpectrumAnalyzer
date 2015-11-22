@@ -17,7 +17,8 @@ import Instruments.Screen as Screen
 class spectrumAnalyzer(QtGui.QWidget):
     def __init__(self, parent=None):
         super(spectrumAnalyzer, self).__init__(parent)
-
+		
+		
         self.device =  Devices.sundCardDevice()
         self.CHUNK = self.device.CHUNK    #  CHUNK is power of 2
         self.samlingRate = self.device.samlingRate # sampling/second
@@ -94,16 +95,19 @@ class spectrumAnalyzer(QtGui.QWidget):
 
     def SelectWindowsFun(self, index):
         #global window
-        if   index == 0:
-            self.window = np.ones(self.CHUNK)
-        elif index == 1:
-            self.window = np.hamming(self.CHUNK)
-        elif index == 2:
-            self.window = np.hanning(self.CHUNK)
-        elif index == 3:
-            self.window = np.bartlett(self.CHUNK)
-        elif index == 4:
-             self.window = np.blackman(self.CHUNK)
+		#self.window = np.ones(self.CHUNK)
+		x = {0: np.ones(self.CHUNK), 1:  np.hamming(self.CHUNK), 2: np.hanning(self.CHUNK), 3: np.bartlett(self.CHUNK), 4: np.blackman(self.CHUNK)}
+		self.window = x[index]
+		# if   index == 0:
+            # self.window = np.ones(self.CHUNK)
+        # elif index == 1:
+            # self.window = np.hamming(self.CHUNK)
+        # elif index == 2:
+            # self.window = np.hanning(self.CHUNK)
+        # elif index == 3:
+            # self.window = np.bartlett(self.CHUNK)
+        # elif index == 4:
+             # self.window = np.blackman(self.CHUNK)
 
     def BtnPower_clicked(self):
         if self.ON_OFF :
