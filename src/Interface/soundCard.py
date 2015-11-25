@@ -15,10 +15,10 @@ class sundCardDevice:
 		self.samlingRate = 88200
 		self.CHUNK = 2048
 		
-		self.maxVal = 2.0**(16-1)    #  (16bit -1bit)  = 15 for scaling the amplitude
+		self.maxVal = 2.0**(16-1)    #  (16bit -1bit)  = 15 for scaling the amplitude`1
 	def openPort(self):   
 		self.p = pyaudio.PyAudio()
-		self.Stream = self.p.open(format = self.FORMAT, channels = self.CHANNELS, rate = self.samlingRate, input = True, frames_per_buffer = self.CHUNK)
+		self.Stream = self.p.open(format = self.FORMAT, channels = self.CHANNELS, rate = self.samlingRate, input = True, output=True, frames_per_buffer = self.CHUNK)
 
 	def readSignal(self):
 		signal = self.Stream.read(self.CHUNK)
