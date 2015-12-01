@@ -5,6 +5,7 @@ from PySide import QtCore, QtGui
 #import Devices
 import Interface.soundCard as Devices
 import Instruments.Screen as Screen
+from Cython.Plex.Regexps import Str
 
 ''' Oscilloscpe Class ======================================================================='''
 class oscilloscope(QtGui.QWidget):
@@ -21,8 +22,17 @@ class oscilloscope(QtGui.QWidget):
 
         ''' Create Widget for screen'''
         self.ScreenTIME = Screen.Display("Time (ms)", "Amplitude",  [0 , .022], [-1 , 1])
+        
+        self.markerPos_label = pg.LabelItem(test = 'rajab   d')
+        self.ScreenTIME.addItem(self.markerPos_label)
+        
         self.timePlotCH1  = self.ScreenTIME.plot(pen='y', )
         self.timePlotCH2  = self.ScreenTIME.plot(pen='r', )
+        
+        
+        self.marker1 = pg.InfiniteLine(angle=90, movable=True)      # create  Marker1 
+        self.ScreenTIME.addItem(self.marker1, ignoreBounds=True)    # add marker to the view
+        self.marker1.sigPositionChangeFinished.connect(self.markerChanged) # signal and slote for marker position changed
         
         self.ch1_panel = ChPanel("Ch1")
         self.ch2_panel = ChPanel("Ch2")
@@ -76,6 +86,11 @@ class oscilloscope(QtGui.QWidget):
 #     def StopFreqChanged(self):
 # 		xLimit = [self.SpinBoxStartFreq.value() , self.SpinBoxStopFreq.value()]
 # 		self.ScreenTIME.setRange(xRange=xLimit)
+
+    def markerChanged(self):
+        PosMarker = self.marker1.value()
+        self.markerPos_label.setText("<span style='color: red'>y1=%0.1f</span>" % (PosMarker))
+        print PosMarker
 
 
     def BtnPower_clicked(self):
@@ -155,4 +170,3 @@ class ChPanel(QtGui.QWidget):
         
     def PositionChanged(self):
         self.PositionShifBy = self.amplPosition_spinBox.value()
-		

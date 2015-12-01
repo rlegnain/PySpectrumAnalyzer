@@ -12,7 +12,8 @@ class Display(pg.PlotWidget):
 		self.setBackground( background=(44, 44, 0)) # define plot windows
 		self.showGrid(x = True, y = True, alpha = 0.3) 
 
-		self.setLabels(bottom=xLabel) 
-		self.setLabels(left=yLabel)
+		self.setLabels(bottom=xLabel, top='') 
+		self.setLabels(left=yLabel, right='')
 		self.setRange(xRange=xLimit)
 		self.setRange(yRange=yLimit)
+		
