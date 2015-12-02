@@ -21,18 +21,12 @@ class oscilloscope(QtGui.QWidget):
         self.ON_OFF = False   # False means OFF
 
         ''' Create Widget for screen'''
-        self.ScreenTIME = Screen.Display("Time (ms)", "Amplitude",  [0 , .022], [-1 , 1])
         
-        self.markerPos_label = pg.LabelItem(test = 'rajab   d')
-        self.ScreenTIME.addItem(self.markerPos_label)
+#         self.ScreenTIME = Screen.Display("Time (ms)", "Amplitude",  [0 , .022], [-1 , 1])
+        self.ScreenTIME = Screen.Display("Time (ms)", "Amplitude",  [0 , .022], [-1 , 1])               
+#         self.timePlotCH1  = self.ScreenTIME.plot(pen='y', )
+#         self.timePlotCH2  = self.ScreenTIME.plot(pen='r', )
         
-        self.timePlotCH1  = self.ScreenTIME.plot(pen='y', )
-        self.timePlotCH2  = self.ScreenTIME.plot(pen='r', )
-        
-        
-        self.marker1 = pg.InfiniteLine(angle=90, movable=True)      # create  Marker1 
-        self.ScreenTIME.addItem(self.marker1, ignoreBounds=True)    # add marker to the view
-        self.marker1.sigPositionChangeFinished.connect(self.markerChanged) # signal and slote for marker position changed
         
         self.ch1_panel = ChPanel("Ch1")
         self.ch2_panel = ChPanel("Ch2")
@@ -87,10 +81,6 @@ class oscilloscope(QtGui.QWidget):
 # 		xLimit = [self.SpinBoxStartFreq.value() , self.SpinBoxStopFreq.value()]
 # 		self.ScreenTIME.setRange(xRange=xLimit)
 
-    def markerChanged(self):
-        PosMarker = self.marker1.value()
-        self.markerPos_label.setText("<span style='color: red'>y1=%0.1f</span>" % (PosMarker))
-        print PosMarker
 
 
     def BtnPower_clicked(self):
@@ -125,9 +115,11 @@ class oscilloscope(QtGui.QWidget):
         timeSignalCH2 = (self.ch2_panel.AmplitudeScaleBy * CH2) + self.ch2_panel.PositionShifBy
         
         timeRange = np.arange(0 , self.CHUNK) / float(self.samlingRate)
-        self.timePlotCH1.setData(timeRange, timeSignalCH1)
-        self.timePlotCH2.setData(timeRange, timeSignalCH2)
-
+#         self.timePlotCH1.setData(timeRange, timeSignalCH1)
+#         self.timePlotCH2.setData(timeRange, timeSignalCH2)
+        self.ScreenTIME.CH1Curve.setData(timeRange, timeSignalCH1)
+        self.ScreenTIME.CH2Curve.setData(timeRange, timeSignalCH2)
+        
 ''' creeate panel control for Channel 1 and channel 2		'''
 class ChPanel(QtGui.QWidget):
     def __init__(self,  GroupName):

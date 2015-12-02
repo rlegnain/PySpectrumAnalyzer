@@ -31,7 +31,6 @@ class spectrumAnalyzer(QtGui.QWidget):
 
         ''' Create Widget for screen'''
         self.ScreenFFT =  Screen.Display("Frequency (Hz)", "Magnitude",  [0,8000], [0,1.5])
-        self.fftPlot = self.ScreenFFT.plot(pen='y', )
         
         ''' Create list box of Frequency range'''
         self.FreqRangeGroup = QtGui.QGroupBox("Frequency Rang (Hz)")
@@ -153,5 +152,5 @@ class spectrumAnalyzer(QtGui.QWidget):
 
     def plotOnScreen(self):
         MagnitudeFFT, freqRange  = self.calculateFFT()
-        self.fftPlot.setData(freqRange, MagnitudeFFT)
+        self.ScreenFFT.CH1Curve.setData(freqRange, MagnitudeFFT)
 
